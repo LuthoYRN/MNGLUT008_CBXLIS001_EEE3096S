@@ -489,7 +489,37 @@ void TIM16_IRQHandler(void)
 
 	// TODO: Initialise a string to output second line on LCD
 
+void TIM16_IRQHandler(void)
+{
+	// Acknowledge interrupt
+	HAL_TIM_IRQHandler(&htim16);
 
+	// TODO: Initialise a string to output second line on LCD
+
+
+	// TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
+	// Read the value from EEPROM at the current address
+
+    uint8_t eepromValue = read_from_address(currentAddress);
+
+    // Check if the read value matches the expected value from binaryArray
+    if (eepromValue == binaryArray[currentAddress])
+    {
+        // Format and print the correct value to LCD
+        char lcdLine[16];
+        //f(lcdLine, sizeof(lcdLine), "EEPROM byte:\n%d", eepromValue);
+        sprintf(lcdLine, "%d", eepromValue);
+        writeLCD(lcdLine);
+    }
+    else
+    {
+        // Print SPI error message to LCD
+        writeLCD("SPI ERROR!");
+    }
+
+    // Update the current address and wrap around if needed
+    currentAddress = (currentAddress + 1) % 6;
+}
 	// TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
 	
   
