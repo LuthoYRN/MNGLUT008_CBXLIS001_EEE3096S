@@ -43,7 +43,16 @@
 #define READ 0b00000011
 #define WRITE 0b00000010
 /* USER CODE END PD */
-/*our declared variables*/
+/* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc;
+
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim16;
+
+/* USER CODE BEGIN PV */
+
+// TODO: Define input variables
 uint32_t period = 500;   // Initial frequency period (500 ms, 2 Hz)
 uint32_t previoustime = 0;
 uint32_t adc_value=0;
@@ -56,17 +65,6 @@ static uint8_t binaryArray[6] = {
     0b00001111   // 15 in decimal
 };
 uint16_t currentAddress = 0;
-/* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc;
-
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim6;
-TIM_HandleTypeDef htim16;
-
-/* USER CODE BEGIN PV */
-
-// TODO: Define input variables
-
 
 /* USER CODE END PV */
 
