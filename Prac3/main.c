@@ -489,13 +489,6 @@ void TIM16_IRQHandler(void)
 
 	// TODO: Initialise a string to output second line on LCD
 
-void TIM16_IRQHandler(void)
-{
-	// Acknowledge interrupt
-	HAL_TIM_IRQHandler(&htim16);
-
-	// TODO: Initialise a string to output second line on LCD
-
 
 	// TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
 	// Read the value from EEPROM at the current address
@@ -520,17 +513,17 @@ void TIM16_IRQHandler(void)
     // Update the current address and wrap around if needed
     currentAddress = (currentAddress + 1) % 6;
 }
-	// TODO: Change LED pattern; output 0x01 if the read SPI data is incorrect
-	
-  
-
-}
 
 // TODO: Complete the writeLCD function
 void writeLCD(char *char_in){
+
   delay(3000);
-	
-  
+lcd_command(CLEAR);
+lcd_command(CURSOR_HOME);
+	lcd_command(TWOLINE_MODE);
+	lcd_putstring("EEPROM byte");
+	lcd_command(LINE_TWO);
+	lcd_putstring(char_in);
 }
 
 // Get ADC value
@@ -544,11 +537,10 @@ uint32_t pollADC(void){
 
 // Calculate PWM CCR value
 uint32_t ADCtoCCR(uint32_t adc_val){
-  // TODO: Calculate CCR value (val) using an appropriate equation
-
-	//return val;
+ // TODO: Calculate CCR valUE using an equation
+ uint32_t value = (adc_value * 47999) / 4095;
+return value;
 }
-
 void ADC1_COMP_IRQHandler(void)
 {
 	//adc_val = HAL_ADC_GetValue(&hadc); // read adc value
