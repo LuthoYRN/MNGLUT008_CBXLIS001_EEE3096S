@@ -43,16 +43,7 @@
 #define READ 0b00000011
 #define WRITE 0b00000010
 /* USER CODE END PD */
-/* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc;
-
-TIM_HandleTypeDef htim3;
-TIM_HandleTypeDef htim6;
-TIM_HandleTypeDef htim16;
-
-/* USER CODE BEGIN PV */
-
-// TODO: Define input variables
+/*our declared variables*/
 uint32_t period = 500;   // Initial frequency period (500 ms, 2 Hz)
 uint32_t previoustime = 0;
 uint32_t adc_value=0;
@@ -65,6 +56,22 @@ static uint8_t binaryArray[6] = {
     0b00001111   // 15 in decimal
 };
 uint16_t currentAddress = 0;
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc;
+
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim16;
+
+/* USER CODE BEGIN PV */
+
+// TODO: Define input variables
+
 
 /* USER CODE END PV */
 
@@ -144,19 +151,19 @@ int main(void)
   for(int i = 0;i < 6; i++){
 	  write_to_address(i,binaryArray[i]);
   }
-  
   /* USER CODE END 2 */
-
+  //M16_IRQHandler();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 
-	adc_value = pollADC(); // Read ADC value from potentiometer
-	// TODO: Get CRR
-  CCR = ADCtoCCR(adc_value); // Convert ADC value to CCR value
+	// TODO: Poll ADC
 
-  
+   adc_value = pollADC(); // Read ADC value from potentiometer
+	// TODO: Get CRR
+    CCR = ADCtoCCR(adc_value); // Convert ADC value to CCR value
+
 
   // Update PWM value
 	__HAL_TIM_SetCompare(&htim3, TIM_CHANNEL_3, CCR);
@@ -541,6 +548,7 @@ uint32_t ADCtoCCR(uint32_t adc_val){
  uint32_t value = (adc_value * 47999) / 4095;
 return value;
 }
+
 void ADC1_COMP_IRQHandler(void)
 {
 	//adc_val = HAL_ADC_GetValue(&hadc); // read adc value
