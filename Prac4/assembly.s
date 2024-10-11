@@ -62,6 +62,25 @@ main_loop:
 
     B main_loop               @ Loop back to the start if no match
 
+no_button_pressed:
+    @ Default behavior: increment LEDs by 1 every 0.7 seconds
+    BL long_delay              @ Call long delay function
+    ADDS R2, R2, #1            @ Increment LEDs by 1
+    B write_leds               @ Go write the LED values
+
+sw0_pressed:
+    @ SW0 behavior: increment LEDs by 2
+    BL long_delay              @ Call long delay function
+    ADDS R2, R2, #2            @ Increment LEDs by 2
+    B write_leds               @ Go write the LED values
+
+sw1_pressed:
+    @ SW1 behavior: faster increment (0.3 seconds)
+    BL short_delay             @ Call short delay function
+    ADDS R2, R2, #1            @ Increment LEDs by 1
+    B write_leds               @ Go write the LED values
+
+
 write_leds:
 	STR R2, [R1, #0x14]
 	B main_loop
