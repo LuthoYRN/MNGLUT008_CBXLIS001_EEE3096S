@@ -80,19 +80,49 @@ sw1_pressed:
     ADDS R2, R2, #1            @ Increment LEDs by 1
     B write_leds               @ Go write the LED values
 
+sw2_pressed:
+    @ SW2 behavior: set LED pattern to 0xAA
+    MOVS R2, #0xAA             @ Set LEDs to pattern 0xAA
+    B write_leds               @ Go write the LED values
+
+sw0_sw1_pressed:
+    @ If both SW0 and SW1 are pressed, increment by 2 every 0.3 seconds
+    ADDS R2, R2, #2            @ Increment LEDs by 2
+    BL short_delay             @ Call short delay function (0.3 seconds)
+    B write_leds               @ Go write the LED values
+
+
+sw3_pressed:
+    @ SW3 behavior: freeze the LEDs
+    B main_loop                @ Just loop without updating LEDs
+
+////Delay methods
+long_delay:
+    LDR R4, LONG_DELAY_CNT     @ Load long delay count into R4
+    B delay_loop
+
+@ Subroutine for short delay (0.3 seconds)
+short_delay:
+    LDR R4, SHORT_DELAY_CNT    @ Load short delay count into R4
+    B delay_loop               @ Use the same loop as in long_delay
+
+delay_loop:
+    SUBS R4, R4, #1            @ Decrement R4 (not R0)
+    BNE delay_loop             @ Loop until R4 reaches zero
+    BX LR                      @ Return from subroutine
 
 write_leds:
-	STR R2, [R1, #0x14]
-	B main_loop
+    STR R2, [R1, #0x14]
+    B main_loop
 
 @ LITERALS; DO NOT EDIT
-	.align
-RCC_BASE: 			.word 0x40021000
-AHBENR_GPIOAB: 		.word 0b1100000000000000000
-GPIOA_BASE:  		.word 0x48000000
-GPIOB_BASE:  		.word 0x48000400
-MODER_OUTPUT: 		.word 0x5555
+    .align
+RCC_BASE:           .word 0x40021000
+AHBENR_GPIOAB:      .word 0b1100000000000000000
+GPIOA_BASE:         .word 0x48000000
+GPIOB_BASE:         .word 0x48000400
+MODER_OUTPUT:       .word 0x5555
 
 @ TODO: Add your own values for these delays
-LONG_DELAY_CNT: 	.word 0
-SHORT_DELAY_CNT: 	.word 0
+LONG_DELAY_CNT:     .word 1400000    @ 0.7 second delay
+SHORT_DELAY_CNT:    .word 600000     @ 0.3 second delay
