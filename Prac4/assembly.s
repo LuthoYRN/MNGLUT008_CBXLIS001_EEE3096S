@@ -35,6 +35,12 @@ ASM_Main:
 @ TODO: Add code, labels and logic for button checks and LED patterns
 
 main_loop:
+	LDR R5, GPIOA_BASE		  @ GPIOA BASE
+    LDR R3, [R5, #0x10]       @ Reading input data register (IDR)
+	
+	MOVS R5, #0b00000011      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
+    TST R3, R5                @ Test bit 1 by ANDing R3 and R5; sets condition flags
+    BEQ sw0_sw1_pressed       @ If Z flag is set, SW0 is pressed
 
 
 write_leds:
