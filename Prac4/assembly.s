@@ -2,7 +2,7 @@
  * assembly.s
  *
  */
- 
+
  @ DO NOT EDIT
 	.syntax unified
     .text
@@ -31,18 +31,19 @@ ASM_Main:
 	LDR R2, MODER_OUTPUT
 	STR R2, [R1, #0]
 	MOVS R2, #0         	@ NOTE: R2 will be dedicated to holding the value on the LEDs
+	MOVS R3, #0
 
 @ TODO: Add code, labels and logic for button checks and LED patterns
 
 main_loop:
-	LDR R5, GPIOA_BASE		  @ GPIOA BASE
+    LDR R5, GPIOA_BASE
     LDR R3, [R5, #0x10]       @ Reading input data register (IDR)
-	
-	MOVS R5, #0b00000011      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
+
+    MOVS R5, #0b00000011      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
     TST R3, R5                @ Test bit 1 by ANDing R3 and R5; sets condition flags
     BEQ sw0_sw1_pressed       @ If Z flag is set, SW0 is pressed
 
-	MOVS R5, #0b00000001      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
+    MOVS R5, #0b00000001      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
     TST R3, R5                @ Test bit 1 by ANDing R3 and R5; sets condition flags
     BEQ sw0_pressed           @ If Z flag is set, SW0 is pressed
 
@@ -50,7 +51,7 @@ main_loop:
     TST R3, R5                @ Test bit 1 by ANDing R3 and R5; sets condition flags
     BEQ sw1_pressed           @ If Z flag is set, SW0 is pressed
 
-	MOVS R5, #0b00000100      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
+    MOVS R5, #0b00000100      @ Set R5 to 0b00000010 (mask for bit 1 - SW0)
     TST R3, R5                @ Test bit 1 by ANDing R3 and R5; sets condition flags
     BEQ sw2_pressed           @ If Z flag is set, SW0 is pressed
 
@@ -61,6 +62,7 @@ main_loop:
     B no_button_pressed
 
     B main_loop               @ Loop back to the start if no match
+
 
 no_button_pressed:
     @ Default behavior: increment LEDs by 1 every 0.7 seconds
